@@ -28,19 +28,28 @@ class _SearchScreenState extends State<SearchScreen> {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding:  EdgeInsets.symmetric(horizontal: 16, vertical: size.height*0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: size.height * 0.08,
               width: size.width,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: Colors.white,
               ),
-              child: TextFormField(
-                controller: _searchController,
+              child: Center(
+                child: TextFormField(
+                  controller: _searchController,
+                  cursorColor: Colors.black,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    suffixIcon: Icon(Icons.search_outlined, color: Color(0xffA7A7A7),),
+                    
+                  ),
+                ),
               ),
             )
           ],
