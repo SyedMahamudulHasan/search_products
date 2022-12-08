@@ -179,10 +179,10 @@ class Brand {
 
 class Charge {
   double? bookingPrice;
-  int? currentCharge;
+  double? currentCharge;
   String? discountCharge;
-  int? sellingPrice;
-  int? profit;
+  double? sellingPrice;
+  double? profit;
   bool? isEvent;
   String? eventId;
   bool? highlight;
