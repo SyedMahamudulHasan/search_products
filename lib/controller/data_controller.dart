@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:search_products/controller/controller_helper.dart';
 import 'package:search_products/model/product_model.dart';
 

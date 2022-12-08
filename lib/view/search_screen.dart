@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
+import 'package:search_products/controller/data_controller.dart';
+import 'package:search_products/model/product_model.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -11,6 +14,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController? _searchController;
+   ProductsModel? products;
+
+   _getProducts() async {
+    products = await Provider.of<DataController>(context).getProducts();
+   }
   @override
   void initState() {
     _searchController = TextEditingController();
@@ -28,7 +36,8 @@ class _SearchScreenState extends State<SearchScreen> {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 16, vertical: size.height*0.06),
+        padding:
+            EdgeInsets.symmetric(horizontal: 16, vertical: size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,9 +55,14 @@ class _SearchScreenState extends State<SearchScreen> {
                   cursorColor: Colors.black,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
-                    suffixIcon: Icon(Icons.search_outlined, color: Color(0xffA7A7A7),),
-                    
+                    suffixIcon: Icon(
+                      Icons.search_outlined,
+                      color: Color(0xffA7A7A7),
+                    ),
                   ),
+                  onChanged: (value) {
+                    
+                  },
                 ),
               ),
             )
