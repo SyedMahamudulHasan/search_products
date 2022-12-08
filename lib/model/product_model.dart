@@ -178,7 +178,7 @@ class Brand {
 }
 
 class Charge {
-  int? bookingPrice;
+  double? bookingPrice;
   int? currentCharge;
   String? discountCharge;
   int? sellingPrice;

@@ -14,11 +14,14 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController? _searchController;
-   ProductsModel? products;
+  ProductsModel? products;
 
-   _getProducts() async {
-    products = await Provider.of<DataController>(context).getProducts();
-   }
+  _getProducts(String product) async {
+    products = await Provider.of<DataController>(context, listen: false)
+        .getProducts(productName: product);
+    print(products!.data!.products!.results!.length);
+  }
+
   @override
   void initState() {
     _searchController = TextEditingController();
@@ -60,8 +63,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       color: Color(0xffA7A7A7),
                     ),
                   ),
-                  onChanged: (value) {
-                    
+                  onChanged: (productPattern) {
+                    _getProducts(productPattern);
                   },
                 ),
               ),
