@@ -15,16 +15,21 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController? _searchController;
   ProductsModel? products;
+  ScrollController? _controller;
 
-  _getProducts(String product) async {
+  _getProducts(String product, [int offset = 10]) async {
     products = await Provider.of<DataController>(context, listen: false)
-        .getProducts(productName: product);
+        .getProducts(productName: product, offset: offset );
     print(products!.data!.products!.results!.length);
   }
 
   @override
   void initState() {
     _searchController = TextEditingController();
+    _controller = ScrollController()
+      ..addListener(() {
+        _getProducts(_searchController!.text, 4);
+      });
     super.initState();
   }
 
@@ -76,6 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
               SizedBox(
                 height: size.height * 0.85,
                 child: GridView.builder(
+                  controller: _controller,
                   itemCount: products != null
                       ? products!.data!.products!.results!.length
                       : 0,
@@ -102,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Container productCardWidget(Size size, Results results) {
     return Container(
       margin: const EdgeInsets.only(left: 8, bottom: 8),
-      height: size.height*0.20,
+      height: size.height * 0.20,
       width: size.width * 0.40,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       decoration: BoxDecoration(
@@ -112,9 +118,17 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(child: Image(image: NetworkImage(results.image!), alignment: Alignment.center, height: size.height*0.09, fit: BoxFit.fill,)),
+          Center(
+              child: Image(
+            image: NetworkImage(results.image!),
+            alignment: Alignment.center,
+            height: size.height * 0.09,
+            fit: BoxFit.fill,
+          )),
           //product name and type
-          SizedBox(height: size.height*0.01,),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
           DefaultTextStyle(
             style: TextStyle(
               fontFamily: "poppins",
@@ -123,18 +137,26 @@ class _SearchScreenState extends State<SearchScreen> {
               fontSize: size.width * 0.03,
             ),
             child: Text(
-                  results.productName!,
-                ),
+              results.productName!,
+            ),
           ),
           //poduct price
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if(results.charge!.discountCharge != null)
-              priceTextWidget(text: "ক্রয় ", size: size, color: const Color(0xffda2079),price: results.charge!.discountCharge!)
+              if (results.charge!.discountCharge != null)
+                priceTextWidget(
+                    text: "ক্রয় ",
+                    size: size,
+                    color: const Color(0xffda2079),
+                    price: results.charge!.discountCharge!)
               else
-              priceTextWidget(text: "ক্রয় ", size: size, color: const Color(0xffda2079),price: results.charge!.currentCharge!),
+                priceTextWidget(
+                    text: "ক্রয় ",
+                    size: size,
+                    color: const Color(0xffda2079),
+                    price: results.charge!.currentCharge!),
               Text(
                 "৳${results.charge!.currentCharge!}",
                 style: TextStyle(
@@ -150,11 +172,19 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FittedBox(
-                fit: BoxFit.fitWidth,
-                child: priceTextWidget(text: "বিক্রয়", size: size, color: const Color(0xffda2079), price: results.charge!.sellingPrice!)),
+                  fit: BoxFit.fitWidth,
+                  child: priceTextWidget(
+                      text: "বিক্রয়",
+                      size: size,
+                      color: const Color(0xffda2079),
+                      price: results.charge!.sellingPrice!)),
               FittedBox(
-                fit: BoxFit.fitWidth,
-              child: priceTextWidget(text: "লাভ", size: size, color: const Color(0xffda2079), price: results.charge!.profit!)),
+                  fit: BoxFit.fitWidth,
+                  child: priceTextWidget(
+                      text: "লাভ",
+                      size: size,
+                      color: const Color(0xffda2079),
+                      price: results.charge!.profit!)),
               // Text(
               //   '৳ 20.00',
               //   style: TextStyle(
