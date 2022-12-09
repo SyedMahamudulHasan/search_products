@@ -44,6 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //search field
             Container(
               height: size.height * 0.08,
               width: size.width,
@@ -68,10 +69,74 @@ class _SearchScreenState extends State<SearchScreen> {
                   },
                 ),
               ),
-            )
+            ),
+            //products
+            productCardWidget(size)
           ],
         ),
       ),
     );
+  }
+
+  Container productCardWidget(Size size) {
+    return Container(
+            width: size.width*0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Center(
+                //   child: Image.network(""),
+                // )
+                //product name and type
+                DefaultTextStyle(
+                  style: TextStyle(
+                    fontFamily: "poppins", color: const Color(0xff323232), fontWeight: FontWeight.w500, fontSize: size.width*0.03,) ,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                  Text("Lays Classic Family",),
+                  Text("Chips", style: TextStyle(),),
+                ],
+                ),
+                ),
+                //poduct price
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                priceTextWidget(size: size, color: const Color(0xffda2079)),
+                 Text('৳ 20.00', style: TextStyle(color: const Color(0xffda2079), fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough,fontSize: size.width*0.035),)
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                priceTextWidget(size: size, color: const Color(0xffda2079)),
+                 Text('৳ 20.00', style: TextStyle(color: const Color(0xffda2079), fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough,fontSize: size.width*0.035),)
+              ],
+            ),
+           
+              ],
+            ),
+          );
+  }
+
+  Widget priceTextWidget({size, color = const Color(0xffda2079)}) {
+    return  Text.rich(
+  TextSpan(
+  children: [
+    TextSpan(text: 'sell ', style: TextStyle(fontSize: size.width*0.03, fontFamily: "baloo da2", fontWeight: FontWeight.w400,)),
+    TextSpan(
+      text: '৳ 20.00',
+      style: TextStyle(fontWeight: FontWeight.w700, fontSize: size.width*0.04, color: color,),
+    ),
+  ],
+)
+  
+);
   }
 }
