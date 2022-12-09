@@ -17,10 +17,10 @@ class _SearchScreenState extends State<SearchScreen> {
   ProductsModel? products;
   ScrollController? _controller;
 
-  _getProducts(String product, [int offset = 10]) async {
-    products = await Provider.of<DataController>(context, listen: false)
+ Future<ProductsModel?>  _getProducts(String product,int offset) async {
+   return products =  await Provider.of<DataController>(context, listen: false)
         .getProducts(productName: product, offset: offset );
-    print(products!.data!.products!.results!.length);
+    
   }
 
   @override
@@ -48,57 +48,60 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Padding(
           padding:
               EdgeInsets.symmetric(horizontal: 8, vertical: size.height * 0.06),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //search field
-              Container(
-                height: size.height * 0.08,
-                width: size.width,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                ),
-                child: Center(
-                  child: TextFormField(
-                    controller: _searchController,
-                    cursorColor: Colors.black,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      suffixIcon: Icon(
-                        Icons.search_outlined,
-                        color: Color(0xffA7A7A7),
+          child: Visibility(
+            visible: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //search field
+                Container(
+                  height: size.height * 0.08,
+                  width: size.width,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                    child: TextFormField(
+                      controller: _searchController,
+                      cursorColor: Colors.black,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        suffixIcon: Icon(
+                          Icons.search_outlined,
+                          color: Color(0xffA7A7A7),
+                        ),
                       ),
+                      onChanged: (productPattern) async {
+                       products = await _getProducts(productPattern, 10);
+                      },
                     ),
-                    onChanged: (productPattern) {
-                      _getProducts(productPattern);
+                  ),
+                ),
+                //products
+                SizedBox(
+                  height: size.height * 0.85,
+                  child: GridView.builder(
+                    controller: _controller,
+                    itemCount: products != null
+                        ? products!.data!.products!.results!.length
+                        : 0,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:
+                            (orientation == Orientation.portrait) ? 2 : 3),
+                    itemBuilder: (BuildContext context, int index) {
+                      if (products != null) {
+                        return productCardWidget(
+                            size, products!.data!.products!.results![index]);
+                      } else {
+                        return const SizedBox();
+                      }
                     },
                   ),
                 ),
-              ),
-              //products
-              SizedBox(
-                height: size.height * 0.85,
-                child: GridView.builder(
-                  controller: _controller,
-                  itemCount: products != null
-                      ? products!.data!.products!.results!.length
-                      : 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount:
-                          (orientation == Orientation.portrait) ? 2 : 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (products != null) {
-                      return productCardWidget(
-                          size, products!.data!.products!.results![index]);
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
