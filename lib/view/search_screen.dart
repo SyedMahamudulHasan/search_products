@@ -14,13 +14,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController? _searchController;
-  ProductsModel? products;
   ScrollController? _controller;
 
- Future<ProductsModel?>  _getProducts(String product,int offset) async {
-   return products =  await Provider.of<DataController>(context, listen: false)
-        .getProducts(productName: product, offset: offset );
-    
+  Future<void> _getProducts(String product, int offset) async {
+    await Provider.of<DataController>(context, listen: false)
+        .getProducts(productName: product, offset: offset);
   }
 
   @override
@@ -43,65 +41,70 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
+    final products = Provider.of<DataController>(context).products;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding:
               EdgeInsets.symmetric(horizontal: 8, vertical: size.height * 0.06),
-          child: Visibility(
-            visible: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //search field
-                Container(
-                  height: size.height * 0.08,
-                  width: size.width,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: TextFormField(
-                      controller: _searchController,
-                      cursorColor: Colors.black,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        suffixIcon: Icon(
-                          Icons.search_outlined,
-                          color: Color(0xffA7A7A7),
-                        ),
-                      ),
-                      onChanged: (productPattern) async {
-                       products = await _getProducts(productPattern, 10);
-                      },
-                    ),
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //search field
+              Container(
+                height: size.height * 0.08,
+                width: size.width,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
                 ),
-                //products
-                SizedBox(
-                  height: size.height * 0.85,
-                  child: GridView.builder(
-                    controller: _controller,
-                    itemCount: products != null
-                        ? products!.data!.products!.results!.length
-                        : 0,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount:
-                            (orientation == Orientation.portrait) ? 2 : 3),
-                    itemBuilder: (BuildContext context, int index) {
-                      if (products != null) {
-                        return productCardWidget(
-                            size, products!.data!.products!.results![index]);
-                      } else {
-                        return const SizedBox();
-                      }
+                child: Center(
+                  child: TextFormField(
+                    controller: _searchController,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      suffixIcon: Icon(
+                        Icons.search_outlined,
+                        color: Color(0xffA7A7A7),
+                      ),
+                    ),
+                    onChanged: (productPattern) {
+                      _getProducts(productPattern, 10);
                     },
                   ),
                 ),
-              ],
-            ),
+              ),
+              //products
+              products != null
+                  ? SizedBox(
+                      height: size.height * 0.85,
+                      child: GridView.builder(
+                        controller: _controller,
+                        itemCount: products != null
+                            ? products.data!.products!.results!.length
+                            : 0,
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    (orientation == Orientation.portrait)
+                                        ? 2
+                                        : 3),
+                        itemBuilder: (BuildContext context, int index) {
+                          if (products != null) {
+                            return productCardWidget(size,
+                                products.data!.products!.results![index]);
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                    )
+                  : const Center(
+                      child: Text("No search found"),
+                    ),
+            ],
           ),
         ),
       ),
