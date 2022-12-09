@@ -42,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-              EdgeInsets.symmetric(horizontal: 16, vertical: size.height * 0.06),
+              EdgeInsets.symmetric(horizontal: 8, vertical: size.height * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -101,10 +101,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Container productCardWidget(Size size, Results results) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      height: size.height*0.25,
-      width: size.width * 0.4,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      margin: const EdgeInsets.only(left: 8, bottom: 8),
+      height: size.height*0.22,
+      width: size.width * 0.40,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -127,13 +127,15 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           //poduct price
           Row(
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              
-              priceTextWidget(size: size, color: const Color(0xffda2079),price: results.charge!.currentCharge!),
-              
+              if(results.charge!.discountCharge != null)
+              priceTextWidget(text: "ক্রয় ", size: size, color: const Color(0xffda2079),price: results.charge!.discountCharge!)
+              else
+              priceTextWidget(text: "ক্রয় ", size: size, color: const Color(0xffda2079),price: results.charge!.currentCharge!),
               Text(
-                results.charge!.discountCharge!.toString(),
+                "৳ ${results.charge!.currentCharge!}",
                 style: TextStyle(
                     color: const Color(0xffda2079),
                     fontWeight: FontWeight.w600,
@@ -143,17 +145,23 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
           Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              priceTextWidget(size: size, color: const Color(0xffda2079), price: results.charge!.sellingPrice!),
-              Text(
-                '৳ 20.00',
-                style: TextStyle(
-                    color: const Color(0xffda2079),
-                    fontWeight: FontWeight.w600,
-                    decoration: TextDecoration.lineThrough,
-                    fontSize: size.width * 0.035),
-              )
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: priceTextWidget(text: "বিক্রয়", size: size, color: const Color(0xffda2079), price: results.charge!.sellingPrice!)),
+              FittedBox(
+                fit: BoxFit.fitWidth,
+              child: priceTextWidget(text: "লাভ", size: size, color: const Color(0xffda2079), price: results.charge!.profit!)),
+              // Text(
+              //   '৳ 20.00',
+              //   style: TextStyle(
+              //       color: const Color(0xffda2079),
+              //       fontWeight: FontWeight.w600,
+              //       decoration: TextDecoration.lineThrough,
+              //       fontSize: size.width * 0.035),
+              // )
             ],
           ),
         ],
@@ -161,21 +169,21 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget priceTextWidget({size, color = const Color(0xffda2079), price}) {
+  Widget priceTextWidget({size, color = const Color(0xffda2079), price, text}) {
     return Text.rich(TextSpan(
       children: [
         TextSpan(
-            text: 'sell ',
+            text: text,
             style: TextStyle(
               fontSize: size.width * 0.03,
               fontFamily: "baloo da2",
               fontWeight: FontWeight.w400,
             )),
         TextSpan(
-          text: price.toString(),
+          text: "৳ $price",
           style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: size.width * 0.04,
+            fontSize: size.width * 0.035,
             color: color,
           ),
         ),
