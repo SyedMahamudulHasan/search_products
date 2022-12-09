@@ -74,7 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               //products
               SizedBox(
-                height: size.height * 0.80,
+                height: size.height * 0.85,
                 child: GridView.builder(
                   itemCount: products != null
                       ? products!.data!.products!.results!.length
@@ -102,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Container productCardWidget(Size size, Results results) {
     return Container(
       margin: const EdgeInsets.only(left: 8, bottom: 8),
-      height: size.height*0.22,
+      height: size.height*0.20,
       width: size.width * 0.40,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       decoration: BoxDecoration(
