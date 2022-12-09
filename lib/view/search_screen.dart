@@ -114,6 +114,7 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           Center(child: Image(image: NetworkImage(results.image!), alignment: Alignment.center, height: size.height*0.09, fit: BoxFit.fill,)),
           //product name and type
+          SizedBox(height: size.height*0.01,),
           DefaultTextStyle(
             style: TextStyle(
               fontFamily: "poppins",
@@ -135,7 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
               else
               priceTextWidget(text: "ক্রয় ", size: size, color: const Color(0xffda2079),price: results.charge!.currentCharge!),
               Text(
-                "৳ ${results.charge!.currentCharge!}",
+                "৳${results.charge!.currentCharge!}",
                 style: TextStyle(
                     color: const Color(0xffda2079),
                     fontWeight: FontWeight.w600,
@@ -145,7 +146,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FittedBox(
@@ -180,7 +181,7 @@ class _SearchScreenState extends State<SearchScreen> {
               fontWeight: FontWeight.w400,
             )),
         TextSpan(
-          text: "৳ $price",
+          text: "৳$price",
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: size.width * 0.035,
