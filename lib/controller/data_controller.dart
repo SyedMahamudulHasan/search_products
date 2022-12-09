@@ -4,11 +4,14 @@ import 'package:search_products/model/product_model.dart';
 
 class DataController extends ChangeNotifier {
   final connection = ConnectionHelper();
+   int offsetValue = 0;
   final String baseUrl =
       "https://panel.supplyline.network/api/product/search-suggestions/?limit=10&offset=10&search=rice";
   Future<ProductsModel?> getProducts({productName, offset = 10}) async {
+   
+   offsetValue = (offset) + offsetValue;
     final response = await connection.getData(
-        "https://panel.supplyline.network/api/product/search-suggestions/?limit=$offset&offset=$offset&search=$productName");
+        "https://panel.supplyline.network/api/product/search-suggestions/?limit=$offsetValue&offset=$offsetValue&search=$productName");
 
     if (response != null) {
       if (response.statusCode == 200) {
