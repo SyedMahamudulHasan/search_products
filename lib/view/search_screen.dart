@@ -87,7 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       return productCardWidget(
                           size, products!.data!.products!.results![index]);
                     } else {
-                      return SizedBox();
+                      return const SizedBox();
                     }
                   },
                 ),
@@ -102,8 +102,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Container productCardWidget(Size size, Results results) {
     return Container(
       margin: const EdgeInsets.all(8),
+      height: size.height*0.25,
       width: size.width * 0.4,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -111,9 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Center(
-          //   child: Image.network(""),
-          // )
+          Center(child: Image(image: NetworkImage(results.image!), alignment: Alignment.center, height: size.height*0.09, fit: BoxFit.fill,)),
           //product name and type
           DefaultTextStyle(
             style: TextStyle(
@@ -122,26 +121,19 @@ class _SearchScreenState extends State<SearchScreen> {
               fontWeight: FontWeight.w500,
               fontSize: size.width * 0.03,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Lays Classic Family",
+            child: Text(
+                  results.productName!,
                 ),
-                Text(
-                  "Chips",
-                  style: TextStyle(),
-                ),
-              ],
-            ),
           ),
           //poduct price
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              priceTextWidget(size: size, color: const Color(0xffda2079)),
+              
+              priceTextWidget(size: size, color: const Color(0xffda2079),price: results.charge!.currentCharge!),
+              
               Text(
-                '৳ 20.00',
+                results.charge!.discountCharge!.toString(),
                 style: TextStyle(
                     color: const Color(0xffda2079),
                     fontWeight: FontWeight.w600,
@@ -153,7 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              priceTextWidget(size: size, color: const Color(0xffda2079)),
+              priceTextWidget(size: size, color: const Color(0xffda2079), price: results.charge!.sellingPrice!),
               Text(
                 '৳ 20.00',
                 style: TextStyle(
@@ -169,7 +161,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget priceTextWidget({size, color = const Color(0xffda2079)}) {
+  Widget priceTextWidget({size, color = const Color(0xffda2079), price}) {
     return Text.rich(TextSpan(
       children: [
         TextSpan(
@@ -180,7 +172,7 @@ class _SearchScreenState extends State<SearchScreen> {
               fontWeight: FontWeight.w400,
             )),
         TextSpan(
-          text: '৳ 20.00',
+          text: price.toString(),
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: size.width * 0.04,
